@@ -44,3 +44,17 @@ Server perlu mengetahui port mana yang harus dibuka untuk mendengarkan (listen) 
 Client perlu mengetahui port tujuan yang tepat untuk mengirimkan permintaan koneksi. Informasi ini didefinisikan di dalam URI WebSocket. Saya mengubah `Uri::from_static("ws://127.0.0.1:2000")` menjadi `Uri::from_static("ws://127.0.0.1:8080")`.
 
 Kedua belah pihak menggunakan protokol WebSocket yang ditandai dengan skema `ws://` pada URI client. Protokol ini dikelola oleh pustaka (library) `tokio-websockets` (melalui `ServerBuilder` dan `ClientBuilder`) yang berjalan di atas aliran (stream) TCP mentah.
+
+## 📝 Modifikasi Pesan Interaktif dan Identitas Pengirim
+
+Untuk meningkatkan pengalaman pengguna (*user experience*) dan transparansi dalam percakapan, saya telah memodifikasi logika pengiriman pesan pada sisi server agar mencantumkan identitas pengirim secara spesifik.
+
+### Perubahan yang Dilakukan:
+1.  **Format Pesan Kustom**: Setiap pesan yang masuk ke server kini dibungkus ulang dengan prefix `Anderson's Computer - Dari server:`.
+2.  **Identifikasi Alamat**: Saya menyertakan `SocketAddr` (IP dan Port) pengirim langsung ke dalam teks pesan. Hal ini memudahkan setiap client untuk mengetahui dari mana pesan berasal secara teknis, mengingat aplikasi ini belum memiliki sistem *username*.
+3.  **Penambahan Unsur Visual**: Saya menambahkan emoji (seperti `💬`) untuk membuat antarmuka terminal terasa lebih seperti aplikasi chat modern dan tidak terlalu kaku.
+
+### Mengapa Perubahan Ini Dilakukan?
+Tanpa adanya sistem akun, pengguna akan kesulitan membedakan pesan dari berbagai client yang berbeda. Dengan menyertakan informasi IP dan Port yang dibungkus dalam kalimat interaktif, setiap partisipan dalam chat mendapatkan konteks yang jelas mengenai siapa yang sedang berbicara, sekaligus memberikan sentuhan personal pada tampilan aplikasi.
+
+![Modified chat](image-2.png)

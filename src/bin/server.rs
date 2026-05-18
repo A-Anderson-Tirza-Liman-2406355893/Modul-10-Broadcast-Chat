@@ -23,8 +23,12 @@ async fn handle_connection(
                     Some(Ok(msg)) => {
                         if let Some(text) = msg.as_text() {
                             println!("Menerima pesan dari {addr}: {text}");
-                            // Kirim pesan sekaligus alamat pengirimnya
-                            let _ = bcast_tx.send((addr, text.to_string()));
+                            
+                            // Menambahkan identitas komputer dan alamat IP pengirim
+                            let formatted_msg = format!("Anderson's Computer - Dari server: {}: {} 💬", addr, text);
+                            
+                            // Kirim pesan yang sudah diformat ke broadcast channel
+                            let _ = bcast_tx.send((addr, formatted_msg));
                         }
                     }
                     Some(Err(e)) => return Err(e.into()),
